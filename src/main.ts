@@ -1,7 +1,7 @@
 import {NestFactory} from '@nestjs/core';
 import {AppModule} from './app.module';
 
-
+// C:\Users\Ricardo\Projects\node-load-balancer>npm run start:dev -- --port=8090 --name=sdf
 
 const minimist = require('minimist');
 
