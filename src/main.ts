@@ -11,20 +11,17 @@ let args = minimist(process.argv.slice(2), {
     },
 });
 
-console.log('args:', args);
-
-
-
-
-const argss = require('yargs').argv;
-
-console.log('Name: ' + argss.port);
-console.log('Age: ' + argss.age);
-
-
 async function bootstrap() {
+
     const app = await NestFactory.create(AppModule);
-    await app.listen(3000);
+
+    const port = args.port;
+
+    console.log(`Listening on port ${port}`);
+
+    //app.setGlobalPrefix('api');
+
+    await app.listen(port);
 }
 
 bootstrap();
