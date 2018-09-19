@@ -19,8 +19,6 @@ async function bootstrap() {
 
     const app = await NestFactory.create(AppModule);
 
-
-
     const FileStore = sessionFileStore(session);
 
     app.use(session({
@@ -29,7 +27,7 @@ async function bootstrap() {
         name: 'session_id',
         resave: false,
         saveUninitialized: false,
-        maxAge: 3600000,
+        maxAge: 60 * 60 * 1000,
 
         cookie: {
             path: '/',
@@ -37,21 +35,11 @@ async function bootstrap() {
             secure: false,
             signed: true,
             sameSite: true,
-            maxAge: 3600000,
+            maxAge: 60 * 60 * 1000,
         },
     }));
 
-
-
-
-
     //app.use(helmet());
-
-
-
-
-
-
 
     const port = args.port;
 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>French</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script>
+        $(function () {
+
+            $('#ping').on('click', function () {
+
+                $.get('/api/ping', {}, function (response) {
+
+                    $('#output').text(($('#output').text() + "\n" + JSON.stringify(response, null, 2) + "\n--------------").trim());
+                });
+            });
+
+            $('#clear').on('click', function () {
+                $('#output').text('');
+            });
+
+
+            $('#session_init').on('click', function () {
+
+                $.get('/api/ping/session_init', {}, function (response) {
+
+                    $('#output').text(($('#output').text() + "\n" + JSON.stringify(response, null, 2) + "\n--------------").trim());
+                });
+            });
+
+
+            $('#session_destroy').on('click', function () {
+
+                $.get('/api/ping/session_destroy', {}, function (response) {
+
+                    $('#output').text(($('#output').text() + "\n" + JSON.stringify(response, null, 2) + "\n--------------").trim());
+                });
+            });
+
+        })
+    </script>
+
+
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        body {
+            margin: 15px;
+        }
+
+        button  {
+            padding: 4px;
+            min-width: 80px;
+        }
+
+        button + button {
+            margin-left: 5px;
+        }
+
+        #output {
+            white-space: pre-wrap;
+            background-color: whitesmoke;
+            font-family: "Courier New";
+            font-size: .9em;
+            padding: 15px;
+            width: 700px;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>French</h1>
+
+<div>Language <a href="/en/">en</a></div>
+
+<br>
+
+<div>
+    <button id="ping">ping</button>
+    <button id="session_init">init</button>
+    <button id="session_destroy">destroy</button>
+    |
+    <button id="clear">clear</button>
+</div>
+
+<br>
+
+<div id="output"></div>
+</body>
+</html>

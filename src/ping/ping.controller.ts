@@ -1,11 +1,11 @@
-import {Controller, Get, Session} from '@nestjs/common';
+import {Controller, Get, Res, Session} from '@nestjs/common';
 import {randomBytes} from 'crypto';
 
 @Controller('ping')
 export class PingController {
 
     @Get()
-    ping() {
+    ping(@Session() session) {
 
         const minimist = require('minimist');
 
@@ -17,16 +17,44 @@ export class PingController {
 
         const port = args.port;
 
-        return `Ping on port ${port}`;
+        return {
+            status: 'success',
+            data: {
+                session_time: session.time,
+                port: port
+            },
+        };
     }
 
     @Get('session_init')
     session_init(@Session() session) {
 
-        session.token = 'test-token';
-        session.rand =  randomBytes(16);
+        session.time = (new Date()).getTime();
 
-        return JSON.stringify(session);
+        return {
+            status: 'success',
+            data: {
+                session_time: session.time,
+            },
+        };
+    }
+
+    @Get('session_destroy')
+    session_destroy(@Res() res, @Session() session) {
+
+        session.destroy(() => {
+            res.clearCookie('session_id', {path: '/'})
+                .status(200)
+                .send({
+                    status: 'success',
+                    data: {},
+                });
+        });
+
+        return {
+            status: 'failure',
+            data: {},
+        };
     }
 
     @Get('session')
