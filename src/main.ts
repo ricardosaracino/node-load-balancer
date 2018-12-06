@@ -1,7 +1,9 @@
 import {NestFactory} from '@nestjs/core';
 import {AppModule} from './app.module';
 
-// import * as helmet from 'helmet';
+import * as helmet from 'helmet';
+import * as fs from 'fs';
+
 import * as session from 'express-session';
 import sessionFileStore = require('session-file-store');
 
@@ -17,7 +19,12 @@ let args = minimist(process.argv.slice(2), {
 
 async function bootstrap() {
 
-    const app = await NestFactory.create(AppModule);
+    let httpsOptions = {
+        key: fs.readFileSync("./docker/ssl/server.key"),
+        cert: fs.readFileSync("./docker/ssl/server.crt")
+    };
+
+    const app = await NestFactory.create(AppModule, {httpsOptions});
 
     const FileStore = sessionFileStore(session);
 
@@ -32,14 +39,15 @@ async function bootstrap() {
         cookie: {
             path: '/',
             httpOnly: true,
-            secure: false,
+            // todo
+            secure: true, // this is the cause of the issues
             signed: true,
             sameSite: true,
             maxAge: 60 * 60 * 1000,
         },
     }));
 
-    //app.use(helmet());
+    app.use(helmet());
 
     const port = args.port;
 
